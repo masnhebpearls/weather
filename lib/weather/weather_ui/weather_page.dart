@@ -31,10 +31,22 @@ class _WeatherPageState extends State<WeatherPage> {
       child: BlocConsumer<WeatherBloc, WeatherState>(
         listener: (context, state) {
           if (state is LocationExists){
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Location already exists")));
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                backgroundColor: Colors.white,
+                content: Text("Location already exists",
+                style: summaryTextStyle.copyWith(
+                    fontWeight: FontWeight.bold
+                ),
+                )));
           }
           if (state is LocationNotFound){
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Location not  found")));
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                backgroundColor: Colors.white,
+                content: Text("Location not  found",
+                style: summaryTextStyle.copyWith(
+                  fontWeight: FontWeight.bold
+                ),
+                )));
           }
 
           // TODO: implement listener
@@ -124,7 +136,7 @@ class _WeatherPageState extends State<WeatherPage> {
         case (1):
           return "Jan";
         case (2):
-          return "feb";
+          return "Feb";
         case (3):
           return "Mar";
         case (4):
@@ -157,7 +169,7 @@ class _WeatherPageState extends State<WeatherPage> {
         children: [
           Container(
             width: width,
-            height: height * 0.4,
+            height: height * 0.35,
             decoration: BoxDecoration(
               gradient: backGroundGradient,
               borderRadius: BorderRadius.only(
@@ -183,10 +195,6 @@ class _WeatherPageState extends State<WeatherPage> {
                   Text(
                     "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].localTime.substring(8, 10)} ${getMonth(int.parse(context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].localTime.substring(6, 7)))}",
                     style: cardTextStyle.copyWith(fontSize: 22),
-                  ),
-                  Text(
-                    "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].localTime.substring(10, 15)} ",
-                    style: cardTextStyle.copyWith(fontSize: 18),
                   ),
                   Center(
                       child: ImageIcon(
@@ -264,7 +272,7 @@ class _WeatherPageState extends State<WeatherPage> {
                     firstKeyword: "Wind Gust",
                     firstVal:
                     "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].gust} kmph",
-                    secondIcon: FontAwesomeIcons.sun,
+                    secondIcon: Icons.sunny,
                     secondKeyword: "UV Index",
                     secondVal:
                     "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].uv}")

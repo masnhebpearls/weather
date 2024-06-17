@@ -30,7 +30,7 @@ class DrawerRow extends StatelessWidget {
             SizedBox(
               width: MediaQuery.of(context).size.width*0.05,
             ),
-            Text(currentIndex==0 ? "Current Location": location, style: summaryTextStyle,)
+            Text(currentIndex==0 ? "Current Location": location.length> 15 ?'${location.substring(0,15)} ...': location, style: summaryTextStyle,)
           ],
 
         ),

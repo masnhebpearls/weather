@@ -103,8 +103,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         emit(ApiSuccessState(index: currentIndex));
 
       }
-      print(e);
-
+      // emit(ApiFailedState(indexex: currentIndex));
     }
 
 
