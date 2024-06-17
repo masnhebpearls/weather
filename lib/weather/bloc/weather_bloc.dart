@@ -51,14 +51,31 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
       emit(ApiSuccessState(index: currentIndex));
 
-    }catch(e){
-      print(e);
-      emit(ApiFailedState(index: 0));
+    }on DioException catch(e){
+      if (e.response !=null){
+        if (e.response!.statusCode== 400){
+          emit(LocationNotFound(index: currentIndex));
+          emit(ApiSuccessState(index: currentIndex));
+
+        }
+
+      }else{
+        if (weather.isNotEmpty){
+          emit(LoadedButNoInternet(index: 0));
+        }
+        else{
+          emit(ApiFailedState(index: currentIndex));
+        }
+      }
+
     }
+
+
 
   }
 
   FutureOr<void> searchPlaces(SearchPlaces event, Emitter<WeatherState> emit) async {
+    emit(ApiLoadingState(index: 0));
     try{
       final String url = 'http://api.weatherapi.com/v1/current.json?key=ab82b15d25a64de1a0b60109241406&q=${event.value}&aqi=no';
       var response = await Dio().get(url);
@@ -98,12 +115,22 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
     }
     on DioException catch(e){
-      if (e.response!.statusCode== 400){
-        emit(LocationNotFound(index: currentIndex));
-        emit(ApiSuccessState(index: currentIndex));
+      if (e.response !=null){
+        if (e.response!.statusCode== 400){
+          emit(LocationNotFound(index: currentIndex));
+          emit(ApiSuccessState(index: currentIndex));
 
+        }
+
+      }else{
+        if (weather.isNotEmpty){
+          emit(LoadedButNoInternet(index: 0));
+        }
+        else{
+          emit(ApiFailedState(index: currentIndex));
+        }
       }
-      // emit(ApiFailedState(indexex: currentIndex));
+
     }
 
 

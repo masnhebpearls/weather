@@ -24,6 +24,8 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     final weatherBloc = WeatherBloc(position: widget.position)
       ..add(GetApiRequestCalled());
     return BlocProvider(
@@ -48,6 +50,15 @@ class _WeatherPageState extends State<WeatherPage> {
                 ),
                 )));
           }
+           if (state is LoadedButNoInternet){
+             ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                 backgroundColor: Colors.white,
+                 content: Text("No internet, failed to load",
+                   style: summaryTextStyle.copyWith(
+                       fontWeight: FontWeight.bold
+                   ),
+                 )));
+           }
 
           // TODO: implement listener
         },
@@ -55,13 +66,26 @@ class _WeatherPageState extends State<WeatherPage> {
           return BlocBuilder<WeatherBloc, WeatherState>(
             builder: (context, state) {
               switch (state.runtimeType) {
+                case(const (ApiFailedState)):
+                  return  Scaffold(
+                    body: Center(
+                      child: SizedBox(
+                        height: height*0.5,
+                        width: width*0.8,
+                        child: FittedBox(
+                          fit: BoxFit.cover,
+                          child: Image.asset('images/no_internet.gif'),
+                        ),
+                      ),
+                    ),
+                  );
                 case (const (ApiLoadingState)):
                   return const Scaffold(
                     body: Center(
                       child: CircularProgressIndicator(),
                     ),
                   );
-                case const (ApiSuccessState):
+                case  (const (ApiSuccessState) || const (LoadedButNoInternet)):
                   final currentIndex = state.index;
                   return Builder(
                       builder: (ctx) {

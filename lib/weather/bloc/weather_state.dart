@@ -45,3 +45,7 @@ class LocationExists extends WeatherState{
 class LocationNotFound extends WeatherState{
   LocationNotFound({required super.index});
 }
+
+class LoadedButNoInternet extends WeatherState{
+  LoadedButNoInternet({required super.index});
+}
