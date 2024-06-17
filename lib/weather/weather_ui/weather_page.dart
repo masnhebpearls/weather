@@ -28,76 +28,91 @@ class _WeatherPageState extends State<WeatherPage> {
       ..add(GetApiRequestCalled());
     return BlocProvider(
       create: (context) => weatherBloc,
-      child: BlocBuilder<WeatherBloc, WeatherState>(
-        builder: (context, state) {
-          switch (state.runtimeType) {
-            case (const (ApiLoadingState)):
-              return const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            case const (ApiSuccessState):
-              final currentIndex = state.index;
-              return Builder(
-                builder: (ctx) {
-                  return Scaffold(
-                      floatingActionButton: FloatingActionButton(
-                        onPressed: () async {
-                          showDialog<void>(
-                            context: context,
-                            barrierDismissible: true, // user must tap button!
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Add places'),
-                                content: TextField(
-                                  controller: _controller,
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: const Text('Search'),
-                                    onPressed: () {
-                                      ctx.read<WeatherBloc>().add(SearchPlaces(value: _controller.text));
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        child: const Icon(FontAwesomeIcons.plus),
-                      ),
-                      drawer: Drawer(
-                        child: Padding(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * 0.1),
-                            child: ListView.builder(
-                              itemCount: context.read<WeatherBloc>().weather.length,
-                              itemBuilder: (context, index) {
-                                return DrawerRow(
-                                    currentIndex: index,
-                                    location: context
-                                        .read<WeatherBloc>()
-                                        .weather[index]
-                                        .name,
-                                    context: context);
-                              },
-                            )),
-                      ),
-                      appBar: AppBar(
-                        flexibleSpace: Container(
-                          decoration:
-                              const BoxDecoration(gradient: backGroundGradient),
-                        ),
-                        elevation: 0,
-                      ),
-                      body: buildWeatherUI(context,currentIndex));
-                }
-              );
-            default:
-              return Scaffold(body: Container());
+      child: BlocConsumer<WeatherBloc, WeatherState>(
+        listener: (context, state) {
+          if (state is LocationExists){
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Location already exists")));
           }
+          if (state is LocationNotFound){
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Location not  found")));
+          }
+
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          return BlocBuilder<WeatherBloc, WeatherState>(
+            builder: (context, state) {
+              switch (state.runtimeType) {
+                case (const (ApiLoadingState)):
+                  return const Scaffold(
+                    body: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                case const (ApiSuccessState):
+                  final currentIndex = state.index;
+                  return Builder(
+                      builder: (ctx) {
+                        return Scaffold(
+                            floatingActionButton: FloatingActionButton(
+                              onPressed: () async {
+                                showDialog<void>(
+                                  context: context,
+                                  barrierDismissible: true, // user must tap button!
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Add places'),
+                                      content: TextField(
+                                        controller: _controller,
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text('Search'),
+                                          onPressed: () {
+                                            ctx.read<WeatherBloc>().add(SearchPlaces(value: _controller.text));
+                                            _controller.clear();
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: const Icon(FontAwesomeIcons.plus),
+                            ),
+                            drawer: Drawer(
+                              child: Padding(
+                                  padding: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.height * 0.1),
+                                  child: ListView.builder(
+                                    itemCount: context.read<WeatherBloc>().weather.length,
+                                    itemBuilder: (context, index) {
+                                      return DrawerRow(
+                                          currentIndex: index,
+                                          location: context
+                                              .read<WeatherBloc>()
+                                              .weather[index]
+                                              .name,
+                                          context: context);
+                                    },
+                                  )),
+                            ),
+                            appBar: AppBar(
+                              flexibleSpace: Container(
+                                decoration:
+                                const BoxDecoration(gradient: backGroundGradient),
+                              ),
+                              elevation: 0,
+                            ),
+                            body: buildWeatherUI(context,currentIndex));
+                      }
+                  );
+                default:
+                  return Scaffold(body: Container());
+              }
+            },
+          );
         },
       ),
     );
@@ -175,11 +190,12 @@ class _WeatherPageState extends State<WeatherPage> {
                   ),
                   Center(
                       child: ImageIcon(
-                    NetworkImage(
-                      'https:${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].imgUrl}',
-                    ),
-                    size: height * 0.1,
-                  )),
+                        NetworkImage(
+                          'https:${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].imgUrl}',
+                        ),
+                        color: Colors.white,
+                        size: height * 0.1,
+                      )),
                   Center(
                     child: Text(
                       "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].tempC} C",
@@ -212,29 +228,29 @@ class _WeatherPageState extends State<WeatherPage> {
                     firstIcon: FontAwesomeIcons.temperatureEmpty,
                     firstKeyword: "Feels like",
                     firstVal:
-                        "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].feelsLikeC} C",
+                    "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].feelsLikeC} C",
                     secondIcon: Icons.electric_meter,
                     secondKeyword: "Pressure",
                     secondVal:
-                        "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].pressure} in"),
+                    "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].pressure} in"),
                 WeatherSummaryRow(
                     width: width,
                     height: height,
                     firstIcon: FontAwesomeIcons.umbrella,
                     firstKeyword: "Precipitation",
                     firstVal:
-                        "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].precipitation} mm",
+                    "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].precipitation} mm",
                     secondIcon: FontAwesomeIcons.droplet,
                     secondKeyword: "Humidity",
                     secondVal:
-                        "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].humidity} %"),
+                    "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].humidity} %"),
                 WeatherSummaryRow(
                     width: width,
                     height: height,
                     firstIcon: FontAwesomeIcons.wind,
                     firstKeyword: "Wind",
                     firstVal:
-                        "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].windKph} Kmph",
+                    "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].windKph} Kmph",
                     secondIcon: FontAwesomeIcons.diamondTurnRight,
                     secondKeyword: "Direction",
                     secondVal: context
@@ -247,11 +263,11 @@ class _WeatherPageState extends State<WeatherPage> {
                     firstIcon: Icons.wind_power,
                     firstKeyword: "Wind Gust",
                     firstVal:
-                        "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].gust} kmph",
+                    "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].gust} kmph",
                     secondIcon: FontAwesomeIcons.sun,
                     secondKeyword: "UV Index",
                     secondVal:
-                        "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].uv}")
+                    "${context.read<WeatherBloc>().weather[context.read<WeatherBloc>().currentIndex].uv}")
               ],
             ),
           )
