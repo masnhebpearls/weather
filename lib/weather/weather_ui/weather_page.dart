@@ -89,7 +89,9 @@ class _WeatherPageState extends State<WeatherPage> {
                   final currentIndex = state.index;
                   return Builder(
                       builder: (ctx) {
+                        var scaffoldKey = GlobalKey<ScaffoldState>();
                         return Scaffold(
+                          key: scaffoldKey,
                             floatingActionButton: FloatingActionButton(
                               onPressed: () async {
                                 showDialog<void>(
@@ -135,6 +137,12 @@ class _WeatherPageState extends State<WeatherPage> {
                                   )),
                             ),
                             appBar: AppBar(
+                              leading: IconButton(
+                                icon: const Icon(FontAwesomeIcons.list, color: Colors.white,),
+                                onPressed: (){
+                                  scaffoldKey.currentState!.openDrawer();
+                                },
+                              ),
                               flexibleSpace: Container(
                                 decoration:
                                 const BoxDecoration(gradient: backGroundGradient),
