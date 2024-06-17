@@ -31,3 +31,17 @@ class ApiLoadingState extends WeatherState {
 class ApiFailedState extends WeatherState{
   ApiFailedState({required super.index});
 }
+
+
+class ApiResultNotFound extends WeatherState{
+  ApiResultNotFound({required super.index});
+}
+
+
+class LocationExists extends WeatherState{
+  LocationExists({required super.index});
+}
+
+class LocationNotFound extends WeatherState{
+  LocationNotFound({required super.index});
+}

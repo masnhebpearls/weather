@@ -28,7 +28,19 @@ class _WeatherPageState extends State<WeatherPage> {
       ..add(GetApiRequestCalled());
     return BlocProvider(
       create: (context) => weatherBloc,
-      child: BlocBuilder<WeatherBloc, WeatherState>(
+      child: BlocConsumer<WeatherBloc, WeatherState>(
+  listener: (context, state) {
+    if (state is LocationExists){
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Location already exists")));
+    }
+    if (state is LocationNotFound){
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Location not  found")));
+    }
+
+    // TODO: implement listener
+  },
+  builder: (context, state) {
+    return BlocBuilder<WeatherBloc, WeatherState>(
         builder: (context, state) {
           switch (state.runtimeType) {
             case (const (ApiLoadingState)):
@@ -58,6 +70,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                     child: const Text('Search'),
                                     onPressed: () {
                                       ctx.read<WeatherBloc>().add(SearchPlaces(value: _controller.text));
+                                      _controller.clear();
                                       Navigator.of(context).pop();
                                     },
                                   ),
@@ -99,7 +112,9 @@ class _WeatherPageState extends State<WeatherPage> {
               return Scaffold(body: Container());
           }
         },
-      ),
+      );
+  },
+),
     );
   }
 

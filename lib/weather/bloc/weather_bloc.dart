@@ -64,7 +64,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       var response = await Dio().get(url);
       print(response);
       var decodedJson = json.decode(response.toString());
-      weather.add(Weather(
+      final newWeather = Weather(
         localTime: decodedJson['location']['localtime'],
         weatherStatus: decodedJson['current']['condition']['text'],
         imgUrl: decodedJson['current']['condition']['icon'],
@@ -78,12 +78,31 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         tempC: decodedJson['current']['temp_c'],
         windKph: decodedJson['current']['wind_kph'],
         feelsLikeC: decodedJson['current']['feelslike_c'],
-      ),
       );
-      currentIndex= weather.length-1;
-      emit(ApiSuccessState(index: currentIndex));
+
+      final check = weather.where((element)=>element.name == newWeather.name).toList();
+      if (check.isEmpty){
+        weather.add(newWeather);
+        currentIndex= weather.length-1;
+        emit(ApiSuccessState(index: currentIndex));
+
+      }
+      else{
+        weather.remove(check.first);
+        weather.add(newWeather);
+        currentIndex= weather.length-1;
+        emit(LocationExists(index: currentIndex));
+        emit(ApiSuccessState(index: currentIndex));
+
+      }
+
     }
-    catch(e){
+    on DioException catch(e){
+      if (e.response!.statusCode== 400){
+        emit(LocationNotFound(index: currentIndex));
+        emit(ApiSuccessState(index: currentIndex));
+
+      }
       print(e);
 
     }
