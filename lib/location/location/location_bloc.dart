@@ -35,11 +35,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     if (permission == LocationPermission.deniedForever){
       emit(LocationPermissionDeniedForever());
     }
-
     Position currentPosition = await Geolocator.getCurrentPosition();
-
     position = currentPosition;
-    print("position is $position");
     emit(LocationSuccessState());
 
 

@@ -105,9 +105,9 @@ _$LocationImpl _$$LocationImplFromJson(Map<String, dynamic> json) =>
       country: json['country'] as String,
       lat: (json['lat'] as num).toDouble(),
       lon: (json['lon'] as num).toDouble(),
-      tzId: json['tzId'] as String,
-      localtimeEpoch: (json['localtimeEpoch'] as num).toInt(),
-      localtime: json['localtime'] as String,
+      tzId: json['tzId'] as String?,
+      localtimeEpoch: (json['localtimeEpoch'] as num?)?.toInt(),
+      localtime: json['localtime'] as String?,
     );
 
 Map<String, dynamic> _$$LocationImplToJson(_$LocationImpl instance) =>

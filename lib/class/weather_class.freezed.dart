@@ -1133,9 +1133,9 @@ mixin _$Location {
   String get country => throw _privateConstructorUsedError;
   double get lat => throw _privateConstructorUsedError;
   double get lon => throw _privateConstructorUsedError;
-  String get tzId => throw _privateConstructorUsedError;
-  int get localtimeEpoch => throw _privateConstructorUsedError;
-  String get localtime => throw _privateConstructorUsedError;
+  String? get tzId => throw _privateConstructorUsedError;
+  int? get localtimeEpoch => throw _privateConstructorUsedError;
+  String? get localtime => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1154,9 +1154,9 @@ abstract class $LocationCopyWith<$Res> {
       String country,
       double lat,
       double lon,
-      String tzId,
-      int localtimeEpoch,
-      String localtime});
+      String? tzId,
+      int? localtimeEpoch,
+      String? localtime});
 }
 
 /// @nodoc
@@ -1177,9 +1177,9 @@ class _$LocationCopyWithImpl<$Res, $Val extends Location>
     Object? country = null,
     Object? lat = null,
     Object? lon = null,
-    Object? tzId = null,
-    Object? localtimeEpoch = null,
-    Object? localtime = null,
+    Object? tzId = freezed,
+    Object? localtimeEpoch = freezed,
+    Object? localtime = freezed,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -1202,18 +1202,18 @@ class _$LocationCopyWithImpl<$Res, $Val extends Location>
           ? _value.lon
           : lon // ignore: cast_nullable_to_non_nullable
               as double,
-      tzId: null == tzId
+      tzId: freezed == tzId
           ? _value.tzId
           : tzId // ignore: cast_nullable_to_non_nullable
-              as String,
-      localtimeEpoch: null == localtimeEpoch
+              as String?,
+      localtimeEpoch: freezed == localtimeEpoch
           ? _value.localtimeEpoch
           : localtimeEpoch // ignore: cast_nullable_to_non_nullable
-              as int,
-      localtime: null == localtime
+              as int?,
+      localtime: freezed == localtime
           ? _value.localtime
           : localtime // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -1232,9 +1232,9 @@ abstract class _$$LocationImplCopyWith<$Res>
       String country,
       double lat,
       double lon,
-      String tzId,
-      int localtimeEpoch,
-      String localtime});
+      String? tzId,
+      int? localtimeEpoch,
+      String? localtime});
 }
 
 /// @nodoc
@@ -1253,9 +1253,9 @@ class __$$LocationImplCopyWithImpl<$Res>
     Object? country = null,
     Object? lat = null,
     Object? lon = null,
-    Object? tzId = null,
-    Object? localtimeEpoch = null,
-    Object? localtime = null,
+    Object? tzId = freezed,
+    Object? localtimeEpoch = freezed,
+    Object? localtime = freezed,
   }) {
     return _then(_$LocationImpl(
       name: null == name
@@ -1278,18 +1278,18 @@ class __$$LocationImplCopyWithImpl<$Res>
           ? _value.lon
           : lon // ignore: cast_nullable_to_non_nullable
               as double,
-      tzId: null == tzId
+      tzId: freezed == tzId
           ? _value.tzId
           : tzId // ignore: cast_nullable_to_non_nullable
-              as String,
-      localtimeEpoch: null == localtimeEpoch
+              as String?,
+      localtimeEpoch: freezed == localtimeEpoch
           ? _value.localtimeEpoch
           : localtimeEpoch // ignore: cast_nullable_to_non_nullable
-              as int,
-      localtime: null == localtime
+              as int?,
+      localtime: freezed == localtime
           ? _value.localtime
           : localtime // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -1303,9 +1303,9 @@ class _$LocationImpl implements _Location {
       required this.country,
       required this.lat,
       required this.lon,
-      required this.tzId,
-      required this.localtimeEpoch,
-      required this.localtime});
+      this.tzId,
+      this.localtimeEpoch,
+      this.localtime});
 
   factory _$LocationImpl.fromJson(Map<String, dynamic> json) =>
       _$$LocationImplFromJson(json);
@@ -1321,11 +1321,11 @@ class _$LocationImpl implements _Location {
   @override
   final double lon;
   @override
-  final String tzId;
+  final String? tzId;
   @override
-  final int localtimeEpoch;
+  final int? localtimeEpoch;
   @override
-  final String localtime;
+  final String? localtime;
 
   @override
   String toString() {
@@ -1375,9 +1375,9 @@ abstract class _Location implements Location {
       required final String country,
       required final double lat,
       required final double lon,
-      required final String tzId,
-      required final int localtimeEpoch,
-      required final String localtime}) = _$LocationImpl;
+      final String? tzId,
+      final int? localtimeEpoch,
+      final String? localtime}) = _$LocationImpl;
 
   factory _Location.fromJson(Map<String, dynamic> json) =
       _$LocationImpl.fromJson;
@@ -1393,11 +1393,11 @@ abstract class _Location implements Location {
   @override
   double get lon;
   @override
-  String get tzId;
+  String? get tzId;
   @override
-  int get localtimeEpoch;
+  int? get localtimeEpoch;
   @override
-  String get localtime;
+  String? get localtime;
   @override
   @JsonKey(ignore: true)
   _$$LocationImplCopyWith<_$LocationImpl> get copyWith =>

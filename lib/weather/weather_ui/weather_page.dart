@@ -36,29 +36,29 @@ class _WeatherPageState extends State<WeatherPage> {
             ScaffoldMessenger.of(context).showSnackBar( SnackBar(
                 backgroundColor: Colors.white,
                 content: Text("Location already exists",
-                style: summaryTextStyle.copyWith(
-                    fontWeight: FontWeight.bold
-                ),
+                  style: summaryTextStyle.copyWith(
+                      fontWeight: FontWeight.bold
+                  ),
                 )));
           }
           if (state is LocationNotFound){
             ScaffoldMessenger.of(context).showSnackBar( SnackBar(
                 backgroundColor: Colors.white,
                 content: Text("Location not  found",
-                style: summaryTextStyle.copyWith(
-                  fontWeight: FontWeight.bold
-                ),
+                  style: summaryTextStyle.copyWith(
+                      fontWeight: FontWeight.bold
+                  ),
                 )));
           }
-           if (state is LoadedButNoInternet){
-             ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-                 backgroundColor: Colors.white,
-                 content: Text("No internet, failed to load",
-                   style: summaryTextStyle.copyWith(
-                       fontWeight: FontWeight.bold
-                   ),
-                 )));
-           }
+          if (state is LoadedButNoInternet){
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                backgroundColor: Colors.white,
+                content: Text("No internet, failed to load",
+                  style: summaryTextStyle.copyWith(
+                      fontWeight: FontWeight.bold
+                  ),
+                )));
+          }
 
           // TODO: implement listener
         },
@@ -91,7 +91,7 @@ class _WeatherPageState extends State<WeatherPage> {
                       builder: (ctx) {
                         var scaffoldKey = GlobalKey<ScaffoldState>();
                         return Scaffold(
-                          key: scaffoldKey,
+                            key: scaffoldKey,
                             floatingActionButton: FloatingActionButton(
                               onPressed: () async {
                                 showDialog<void>(
@@ -117,7 +117,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                   },
                                 );
                               },
-                              child: const Icon(FontAwesomeIcons.plus),
+                              child: const Icon(FontAwesomeIcons.magnifyingGlass),
                             ),
                             drawer: Drawer(
                               child: Padding(

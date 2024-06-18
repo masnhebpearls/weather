@@ -1,16 +1,14 @@
 // To parse this JSON data, do
 //
-//     final weatherClass = weatherClassFromJson(jsonString);
+//     final weatherClass = weatherClassFromMap(jsonString);
 
+import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
 
 part 'weather_class.freezed.dart';
 part 'weather_class.g.dart';
 
-WeatherClass weatherClassFromJson(String str) => WeatherClass.fromJson(json.decode(str));
-
-String weatherClassToJson(WeatherClass data) => json.encode(data.toJson());
 
 @freezed
 class WeatherClass with _$WeatherClass {
@@ -78,9 +76,9 @@ class Location with _$Location {
     required String country,
     required double lat,
     required double lon,
-    required String tzId,
-    required int localtimeEpoch,
-    required String localtime,
+    String? tzId,
+    int? localtimeEpoch,
+    String? localtime,
   }) = _Location;
 
   factory Location.fromJson(Map<String, dynamic> json) => _$LocationFromJson(json);

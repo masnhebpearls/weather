@@ -70,6 +70,7 @@ class HomePage extends StatelessWidget {
                           }
                           },
                           builder: (context, state){
+                          print("state is ${state.runtimeType}");
                           switch(state.runtimeType){
                             case(const (LocationInitialState)):
                               return Text("Get your location",
@@ -83,10 +84,11 @@ class HomePage extends StatelessWidget {
                               return Text("location is off", style: buttonTextStyle,);
                             case (const (LocationPermissionDeniedForever)):
                               return Text("location is off forever", style: buttonTextStyle,);
+                            case (const (LocationPermissionDenied)):
+                              return Text("Location denied", style: buttonTextStyle,);
                             default:
                               return const Text('error');
                           }
-
                           },
 
                     ),
